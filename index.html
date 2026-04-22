@@ -168,7 +168,7 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;poi
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
-const APPS_SCRIPT_URL = '%%APPS_SCRIPT_URL%%';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5tT1SRhdcAEhYEllki8wHYfSKWN26KNIuA0gwiJozTkbC3-CZgCIEqgByi3PuL3jS/exec';
 const STRATEGIES = [
   {id:'S1',num:1,title:'ส่งเสริมและยกระดับการผลิตสู่มาตรฐานเกษตรมูลค่าสูง',agency:'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',kpis:[{id:'s1k1',name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s1k2',name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน',target:'เพิ่มขึ้น ≥5%/ปี',unit:'กลุ่ม'}]},
   {id:'S2',num:2,title:'การแปรรูปและสร้างมูลค่าเพิ่ม',agency:'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',kpis:[{id:'s2k1',name:'มูลค่าผลิตภัณฑ์แปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s2k2',name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย'},{id:'s2k3',name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ผลิตภัณฑ์'}]},
@@ -182,7 +182,7 @@ function loadData(){
   if(s) allData=JSON.parse(s);
   render();
   setTimeout(()=>document.getElementById('loadScreen').classList.add('done'),600);
-  if(APPS_SCRIPT_URL!=='%%APPS_SCRIPT_URL%%'){
+  if(APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbz5tT1SRhdcAEhYEllki8wHYfSKWN26KNIuA0gwiJozTkbC3-CZgCIEqgByi3PuL3jS/exec'){
     const cb='cb_'+Date.now();
     window[cb]=function(r){
       if(r.status==='ok'&&r.data&&r.data.length>0){
