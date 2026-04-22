@@ -427,7 +427,7 @@ body {
   <div class="content">
 
     <div class="link-dashboard">
-      <a href="roadmap_dashboard.html" target="_blank">📊 เปิดแดชบอร์ดนำเสนอ</a>
+      <a href="index.html" target="_blank">📊 เปิดแดชบอร์ดนำเสนอ</a>
     </div>
 
     <div class="last-saved" id="lastSaved"></div>
@@ -469,7 +469,7 @@ body {
 // ============================================================
 // CONFIG
 // ============================================================
-const APPS_SCRIPT_URL = '%%APPS_SCRIPT_URL%%';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5tT1SRhdcAEhYEllki8wHYfSKWN26KNIuA0gwiJozTkbC3-CZgCIEqgByi3PuL3jS/exec';
 
 // ============================================================
 // STRATEGIES & KPI MODEL
@@ -707,7 +707,7 @@ function loadData() {
 // ============================================================
 function saveToSheet() {
   collectFormData();
-  if (APPS_SCRIPT_URL === '%%APPS_SCRIPT_URL%%') { toast('⚠️ กรุณาตั้งค่า APPS_SCRIPT_URL ก่อน', true); return; }
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbz5tT1SRhdcAEhYEllki8wHYfSKWN26KNIuA0gwiJozTkbC3-CZgCIEqgByi3PuL3jS/exec') { toast('⚠️ กรุณาตั้งค่า APPS_SCRIPT_URL ก่อน', true); return; }
 
   const rows = [];
   STRATEGIES.forEach(s => {
