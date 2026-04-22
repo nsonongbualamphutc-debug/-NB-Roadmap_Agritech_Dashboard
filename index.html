@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap เกษตรเพิ่มมูลค่า | จ.หนองบัวลำภู</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700;800;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060e09;
+  --bg2: #0b1a10;
+  --card: rgba(12,40,22,0.88);
+  --card-hover: rgba(18,55,30,0.95);
+  --green: #00e676;
+  --lime: #76ff03;
+  --gold: #ffd740;
+  --amber: #ffab00;
+  --cyan: #00e5ff;
+  --txt: #e8f5e9;
+  --txt2: #a5d6a7;
+  --txt3: #66bb6a;
+  --glow: rgba(0,230,118,0.25);
+  --grad-g: linear-gradient(135deg,#00c853,#76ff03);
+  --grad-gold: linear-gradient(135deg,#ff8f00,#ffd740);
+  --r: 16px; --rs: 10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Prompt','Kanit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+
+canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.bg-mesh{position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at 15% 50%,rgba(0,200,83,0.07) 0%,transparent 50%),
+  radial-gradient(ellipse at 85% 20%,rgba(255,215,64,0.05) 0%,transparent 50%),
+  radial-gradient(ellipse at 50% 85%,rgba(0,229,255,0.04) 0%,transparent 50%);
+  z-index:0;animation:pulse 10s ease-in-out infinite alternate}
+@keyframes pulse{0%{opacity:.5}100%{opacity:1}}
+
+.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:20px}
+
+/* HEADER */
+.hero{text-align:center;padding:36px 20px 24px;position:relative}
+.hero-badge{display:inline-block;padding:5px 18px;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.25);border-radius:30px;font-size:11px;font-weight:500;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 8px rgba(0,230,118,0.1)}50%{box-shadow:0 0 22px rgba(0,230,118,0.3)}}
+.hero h1{font-family:'Kanit';font-size:clamp(28px,4.5vw,48px);font-weight:900;line-height:1.15;margin-bottom:6px}
+.hero h1 .g{color:var(--green)}.hero h1 .gl{color:var(--gold)}
+.hero-sub{font-size:15px;color:var(--txt2);font-weight:300}
+.hero-period{display:inline-block;margin-top:10px;padding:4px 16px;background:rgba(255,215,64,0.08);border:1px solid rgba(255,215,64,0.25);border-radius:20px;font-size:13px;color:var(--gold)}
+.hero-link{margin-top:12px}
+.hero-link a{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;color:var(--green);text-decoration:none;font-size:13px;font-weight:500;transition:all .3s}
+.hero-link a:hover{background:rgba(0,230,118,0.15);border-color:var(--green)}
+
+/* TOP KPI CARDS */
+.top-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.top-card{background:var(--card);border:1px solid rgba(0,230,118,0.1);border-radius:var(--r);padding:22px;position:relative;overflow:hidden;transition:all .4s;animation:cardIn .6s ease-out both}
+.top-card:nth-child(1){animation-delay:.1s}.top-card:nth-child(2){animation-delay:.18s}.top-card:nth-child(3){animation-delay:.26s}.top-card:nth-child(4){animation-delay:.34s}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.top-card:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 0 28px rgba(0,230,118,0.12)}
+.top-card .tc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
+.tc-icon.i1{background:rgba(0,230,118,0.12)}.tc-icon.i2{background:rgba(255,215,64,0.12)}.tc-icon.i3{background:rgba(118,255,3,0.12)}.tc-icon.i4{background:rgba(0,229,255,0.12)}
+.top-card .tc-val{font-family:'Kanit';font-size:30px;font-weight:800;line-height:1}
+.top-card .tc-label{font-size:12px;color:var(--txt3);margin-top:4px}
+.top-card .tc-badge{position:absolute;top:14px;right:14px;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700}
+.tc-badge.up{background:rgba(0,230,118,0.12);color:var(--green)}.tc-badge.down{background:rgba(255,82,82,0.12);color:#ff5252}
+.tc-bar{margin-top:10px;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.tc-bar-fill{height:100%;border-radius:2px;background:var(--grad-g);transition:width 1.5s ease-out}
+
+/* STRATEGY SECTIONS */
+.strat{margin-bottom:28px;animation:fadeUp .5s ease-out both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.strat:nth-child(2){animation-delay:.1s}.strat:nth-child(3){animation-delay:.15s}.strat:nth-child(4){animation-delay:.2s}
+.strat-head{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--card);border:1px solid rgba(0,230,118,0.1);border-radius:var(--r);border-left:4px solid var(--green);margin-bottom:14px}
+.strat-num{width:38px;height:38px;background:var(--grad-g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Kanit';font-weight:900;font-size:17px;color:#060e09;flex-shrink:0}
+.strat-title{font-family:'Kanit';font-size:16px;font-weight:600;color:var(--txt)}
+.strat-period{font-size:11px;color:var(--txt3);margin-top:2px}
+.strat-agency{margin-left:auto;padding:4px 12px;background:rgba(255,215,64,0.08);border:1px solid rgba(255,215,64,0.2);border-radius:12px;font-size:11px;color:var(--gold);font-weight:500;white-space:nowrap}
+
+/* KPI DISPLAY CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:14px}
+.kpi-card{background:var(--card);border:1px solid rgba(0,230,118,0.08);border-radius:var(--r);padding:20px;transition:all .4s;position:relative;overflow:hidden}
+.kpi-card:hover{border-color:var(--green);box-shadow:0 0 20px rgba(0,230,118,0.1);transform:translateY(-2px)}
+.kpi-card::after{content:'';position:absolute;top:0;right:0;width:100px;height:100px;background:radial-gradient(circle,rgba(0,230,118,0.04) 0%,transparent 70%);pointer-events:none}
+.kpi-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.kpi-badge{padding:3px 10px;background:var(--green);color:#060e09;border-radius:6px;font-family:'Kanit';font-size:11px;font-weight:700;flex-shrink:0}
+.kpi-name{font-size:13px;font-weight:500;line-height:1.4;color:var(--txt2)}
+.kpi-target{margin-left:auto;padding:3px 10px;background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.2);border-radius:6px;font-size:11px;color:var(--gold);font-weight:500;flex-shrink:0;white-space:nowrap}
+.kpi-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.kpi-metric{text-align:center;padding:10px 8px;background:rgba(0,0,0,0.2);border-radius:var(--rs)}
+.kpi-metric .m-val{font-family:'Kanit';font-size:22px;font-weight:800;color:var(--green);line-height:1}
+.kpi-metric .m-val.gold{color:var(--gold)}
+.kpi-metric .m-label{font-size:11px;color:var(--txt3);margin-top:3px}
+.kpi-pct{text-align:center;margin-top:12px}
+.kpi-pct .pct-bar{height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.pct-fill{height:100%;border-radius:3px;transition:width 1.5s ease-out}
+.pct-fill.pos{background:var(--grad-g)}.pct-fill.neg{background:linear-gradient(135deg,#e53935,#ff5252)}
+.pct-text{font-family:'Kanit';font-size:16px;font-weight:700}
+.pct-text.pos{color:var(--green)}.pct-text.neg{color:#ff5252}
+.pct-sub{font-size:11px;color:var(--txt3)}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin:24px 0}
+.chart-box{background:var(--card);border:1px solid rgba(0,230,118,0.08);border-radius:var(--r);padding:22px;transition:all .4s}
+.chart-box:hover{border-color:var(--green);box-shadow:0 0 20px rgba(0,230,118,0.1)}
+.chart-label{font-family:'Kanit';font-size:14px;font-weight:600;color:var(--txt);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.chart-label .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:dotP 1.5s ease-in-out infinite}
+@keyframes dotP{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+
+.data-note{text-align:center;padding:10px;font-size:12px;color:var(--txt3);margin-bottom:16px}
+.data-note span{color:var(--green);font-weight:600}
+
+.footer{text-align:center;padding:28px 20px 16px;border-top:1px solid rgba(0,230,118,0.08);margin-top:20px}
+.footer p{font-size:12px;color:var(--txt3);line-height:1.8}
+.footer span{color:var(--gold);font-weight:500}
+
+.loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s}
+.loading-screen.done{opacity:0;pointer-events:none}
+.ld-spinner{width:44px;height:44px;border:3px solid rgba(0,230,118,0.15);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-text{font-size:13px;color:var(--green)}
+
+@media(max-width:768px){
+  .wrap{padding:10px}
+  .strat-head{flex-wrap:wrap}.strat-agency{margin-left:0;margin-top:6px}
+  .kpi-grid{grid-template-columns:1fr}
+  .charts-row{grid-template-columns:1fr}
+  .top-card .tc-val{font-size:24px}
+}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:rgba(0,0,0,.2)}::-webkit-scrollbar-thumb{background:rgba(0,230,118,.25);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadScreen">
+  <div class="ld-spinner"></div>
+  <div class="ld-text">กำลังโหลดข้อมูล...</div>
+</div>
+
+<canvas id="bgCanvas"></canvas>
+<div class="bg-mesh"></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-badge">🌿 AgriTech Roadmap Dashboard</div>
+    <h1><span class="g">เกษตรเพิ่มมูลค่า</span>ด้วย<br><span class="gl">เทคโนโลยีและนวัตกรรม</span></h1>
+    <div class="hero-sub">จังหวัดหนองบัวลำภู</div>
+    <div class="hero-period">📅 1 ต.ค. 2567 – 30 ก.ย. 2569</div>
+    <div class="hero-link"><a href="roadmap_entry.html" target="_blank">✏️ เปิดหน้ากรอกข้อมูล</a></div>
+  </div>
+
+  <div class="data-note" id="dataNote">กำลังโหลดข้อมูล...</div>
+  <div class="top-grid" id="topStats"></div>
+  <div id="stratSections"></div>
+
+  <div class="charts-row">
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> ผลงานสะสมรวมรายยุทธศาสตร์</div><canvas id="cBar" height="260"></canvas></div>
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> สัดส่วนความครบถ้วนข้อมูล</div><canvas id="cRadar" height="260"></canvas></div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> % การเปลี่ยนแปลงรายตัวชี้วัด</div><canvas id="cPct" height="260"></canvas></div>
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> เปรียบเทียบฐานเดิม vs ผลงานสะสม</div><canvas id="cCompare" height="260"></canvas></div>
+  </div>
+
+  <div class="footer">
+    <p>ผู้จัดทำและดูแลระบบ: <span>สำนักงานสถิติจังหวัดหนองบัวลำภู</span><br>
+    สำนักงานสถิติแห่งชาติ กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const APPS_SCRIPT_URL = '%%APPS_SCRIPT_URL%%';
+const STRATEGIES = [
+  {id:'S1',num:1,title:'ส่งเสริมและยกระดับการผลิตสู่มาตรฐานเกษตรมูลค่าสูง',agency:'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',kpis:[{id:'s1k1',name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s1k2',name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน',target:'เพิ่มขึ้น ≥5%/ปี',unit:'กลุ่ม'}]},
+  {id:'S2',num:2,title:'การแปรรูปและสร้างมูลค่าเพิ่ม',agency:'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',kpis:[{id:'s2k1',name:'มูลค่าผลิตภัณฑ์แปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s2k2',name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย'},{id:'s2k3',name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ผลิตภัณฑ์'}]},
+  {id:'S3',num:3,title:'การพัฒนาการตลาดและสร้างแบรนด์',agency:'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',kpis:[{id:'s3k1',name:'มูลค่าการจำหน่าย',target:'เพิ่มขึ้น ≥10%/ปี',unit:'บาท'},{id:'s3k2',name:'จำนวนผลิตภัณฑ์ที่ยื่นขอใช้ตรา Nong Bua Lamphu Brand',target:'≥15%/ปี',unit:'ผลิตภัณฑ์'},{id:'s3k3',name:'ความพึงพอใจผู้บริโภคต่อ Nong Bua Lamphu Brand',target:'≥90%',unit:'%'}]},
+  {id:'S4',num:4,title:'การสร้างความเข้มแข็งให้เกษตรกรและสถาบันเกษตร',agency:'สำนักงานเกษตรจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',kpis:[{id:'s4k1',name:'จำนวนเกษตรกรต้นแบบ',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย'},{id:'s4k2',name:'สัดส่วนวิสาหกิจชุมชนศักยภาพระดับดี',target:'≥35.6% ของฐานเดิม',unit:'%'},{id:'s4k3',name:'สัดส่วนสหกรณ์เกษตรเข้มแข็งระดับ 1-2',target:'≥10%',unit:'%'}]}
+];
+let allData={};
+
+function loadData(){
+  const s=localStorage.getItem('agri_data');
+  if(s) allData=JSON.parse(s);
+  render();
+  setTimeout(()=>document.getElementById('loadScreen').classList.add('done'),600);
+  if(APPS_SCRIPT_URL!=='%%APPS_SCRIPT_URL%%'){
+    const cb='cb_'+Date.now();
+    window[cb]=function(r){
+      if(r.status==='ok'&&r.data&&r.data.length>0){
+        r.data.forEach(row=>{const kid=findKpiId(row.kpiName);if(kid){allData[kid]={baseline:row.baseline||'',monthVal:row.monthVal||'',monthUnit:row.monthUnit||'',cumulVal:row.cumulVal||'',cumulUnit:row.cumulUnit||'',pctChange:row.pctChange||0,reportMonth:row.reportMonth||''};}});
+        localStorage.setItem('agri_data',JSON.stringify(allData));render();
+        document.getElementById('dataNote').innerHTML='🔄 ข้อมูลอัปเดตจาก Google Sheet เมื่อ <span>'+new Date().toLocaleString('th-TH')+'</span>';
+      }delete window[cb];
+    };
+    const sc=document.createElement('script');sc.src=APPS_SCRIPT_URL+'?action=getKPI&callback='+cb;document.body.appendChild(sc);
+  }else{
+    document.getElementById('dataNote').innerHTML='แสดงข้อมูลจาก Local Storage • <span>ตั้งค่า APPS_SCRIPT_URL เพื่อดึงข้อมูลล่าสุด</span>';
+  }
+}
+function findKpiId(name){for(const s of STRATEGIES)for(const k of s.kpis)if(k.name===name)return k.id;return null}
+function fmt(v){const n=parseFloat(v);return isNaN(n)?'-':n.toLocaleString('th-TH')}
+
+function render(){renderTop();renderStrat();renderCharts()}
+
+function renderTop(){
+  const total=STRATEGIES.reduce((a,s)=>a+s.kpis.length,0);
+  let filled=0,sumP=0,cntP=0;
+  STRATEGIES.forEach(s=>s.kpis.forEach(k=>{const d=allData[k.id];if(d&&d.cumulVal)filled++;if(d&&d.pctChange){sumP+=d.pctChange;cntP++}}));
+  const avg=cntP>0?sumP/cntP:0,pctD=total>0?filled/total*100:0;
+  document.getElementById('topStats').innerHTML=`
+    <div class="top-card"><div class="tc-icon i1">📊</div><div class="tc-val" style="color:var(--green)">${STRATEGIES.length}</div><div class="tc-label">ยุทธศาสตร์</div><div class="tc-bar"><div class="tc-bar-fill" style="width:100%"></div></div></div>
+    <div class="top-card"><div class="tc-icon i2">🎯</div><div class="tc-val" style="color:var(--gold)">${total}</div><div class="tc-label">ตัวชี้วัด (KPI)</div><div class="tc-bar"><div class="tc-bar-fill" style="width:100%"></div></div></div>
+    <div class="top-card"><div class="tc-icon i3">✅</div><div class="tc-val" style="color:var(--lime)">${filled}<span style="font-size:16px;font-weight:400">/${total}</span></div><div class="tc-label">KPI ที่มีข้อมูล</div><div class="tc-badge ${pctD>=50?'up':'down'}">${pctD.toFixed(0)}%</div><div class="tc-bar"><div class="tc-bar-fill" style="width:${pctD}%"></div></div></div>
+    <div class="top-card"><div class="tc-icon i4">📈</div><div class="tc-val" style="color:${avg>=0?'var(--green)':'#ff5252'}">${avg>=0?'+':''}${avg.toFixed(1)}%</div><div class="tc-label">ค่าเฉลี่ย % เปลี่ยนแปลง</div><div class="tc-badge ${avg>=0?'up':'down'}">${avg>=0?'↑ เพิ่ม':'↓ ลด'}</div><div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(Math.abs(avg),100)}%"></div></div></div>`;
+}
+
+function renderStrat(){
+  document.getElementById('stratSections').innerHTML=STRATEGIES.map(s=>{
+    const kc=s.kpis.map((k,i)=>{
+      const d=allData[k.id]||{},pct=d.pctChange||0,pa=Math.min(Math.abs(pct),100),ip=pct>=0,hd=d.baseline||d.cumulVal;
+      return `<div class="kpi-card"><div class="kpi-top"><span class="kpi-badge">KPI ${i+1}</span><span class="kpi-name">${k.name}</span><span class="kpi-target">${k.target}</span></div>
+      <div class="kpi-metrics"><div class="kpi-metric"><div class="m-val gold">${fmt(d.baseline)}</div><div class="m-label">ฐานเดิม</div></div><div class="kpi-metric"><div class="m-val">${fmt(d.monthVal)}</div><div class="m-label">รอบเดือน${d.reportMonth?' ('+d.reportMonth+')':''}</div></div><div class="kpi-metric"><div class="m-val">${fmt(d.cumulVal)}</div><div class="m-label">สะสม (${d.monthUnit||k.unit})</div></div></div>
+      <div class="kpi-pct"><div class="pct-bar"><div class="pct-fill ${ip?'pos':'neg'}" style="width:${hd?pa:0}%"></div></div><span class="pct-text ${ip?'pos':'neg'}">${hd?(ip?'+':'')+pct.toFixed(1)+'%':'ยังไม่มีข้อมูล'}</span><div class="pct-sub">เปลี่ยนแปลงจากฐานเดิม</div></div></div>`;
+    }).join('');
+    return `<div class="strat"><div class="strat-head"><div class="strat-num">${s.num}</div><div><div class="strat-title">${s.title}</div><div class="strat-period">📅 ${s.period}</div></div><div class="strat-agency">${s.agency}</div></div><div class="kpi-grid">${kc}</div></div>`;
+  }).join('');
+}
+
+let charts={};
+function dC(id){if(charts[id]){charts[id].destroy();delete charts[id]}}
+const clr=['rgba(0,230,118,0.7)','rgba(255,215,64,0.7)','rgba(118,255,3,0.7)','rgba(0,229,255,0.7)'];
+const bdr=['#00e676','#ffd740','#76ff03','#00e5ff'];
+function cO(){return{responsive:true,plugins:{legend:{labels:{color:'#a5d6a7',font:{family:'Kanit',size:11}}}},scales:{x:{ticks:{color:'rgba(255,255,255,.45)',font:{family:'Kanit',size:11}},grid:{color:'rgba(255,255,255,.03)'}},y:{ticks:{color:'rgba(255,255,255,.45)',font:{family:'Kanit',size:11}},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}},animation:{duration:1400,easing:'easeOutQuart'}}}
+
+function renderCharts(){
+  dC('cBar');charts.cBar=new Chart(document.getElementById('cBar'),{type:'bar',data:{labels:STRATEGIES.map(s=>'ยุทธ์ '+s.num),datasets:[{label:'ผลงานสะสมรวม',data:STRATEGIES.map(s=>s.kpis.reduce((a,k)=>a+(parseFloat(allData[k.id]?.cumulVal)||0),0)),backgroundColor:clr,borderColor:bdr,borderWidth:2,borderRadius:8}]},options:cO()});
+  dC('cRadar');charts.cRadar=new Chart(document.getElementById('cRadar'),{type:'radar',data:{labels:STRATEGIES.map(s=>'ยุทธ์ '+s.num),datasets:[{label:'% ครบถ้วน',data:STRATEGIES.map(s=>{const t=s.kpis.length,f=s.kpis.filter(k=>allData[k.id]?.cumulVal).length;return t>0?f/t*100:0}),backgroundColor:'rgba(0,230,118,0.12)',borderColor:'#00e676',borderWidth:2,pointBackgroundColor:'#00e676'}]},options:{...cO(),scales:{r:{beginAtZero:true,max:100,ticks:{color:'rgba(255,255,255,.4)',backdropColor:'transparent',stepSize:25},grid:{color:'rgba(255,255,255,.06)'},pointLabels:{color:'#a5d6a7',font:{family:'Kanit',size:12}},angleLines:{color:'rgba(255,255,255,.06)'}}}}});
+  const ak=STRATEGIES.flatMap(s=>s.kpis),pd=ak.map(k=>allData[k.id]?.pctChange||0);
+  dC('cPct');charts.cPct=new Chart(document.getElementById('cPct'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'% เปลี่ยนแปลง',data:pd,backgroundColor:pd.map(v=>v>=0?'rgba(0,230,118,0.6)':'rgba(255,82,82,0.6)'),borderColor:pd.map(v=>v>=0?'#00e676':'#ff5252'),borderWidth:1,borderRadius:6}]},options:cO()});
+  dC('cCompare');charts.cCompare=new Chart(document.getElementById('cCompare'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'ฐานเดิม',data:ak.map(k=>parseFloat(allData[k.id]?.baseline)||0),backgroundColor:'rgba(255,215,64,0.4)',borderColor:'#ffd740',borderWidth:1,borderRadius:6},{label:'ผลงานสะสม',data:ak.map(k=>parseFloat(allData[k.id]?.cumulVal)||0),backgroundColor:'rgba(0,230,118,0.5)',borderColor:'#00e676',borderWidth:1,borderRadius:6}]},options:cO()});
+}
+
+function initBg(){
+  const c=document.getElementById('bgCanvas'),ctx=c.getContext('2d');let W,H,pts=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight}resize();addEventListener('resize',resize);
+  for(let i=0;i<50;i++)pts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.4,dx:(Math.random()-.5)*.35,dy:(Math.random()-.5)*.25,o:Math.random()*.35+.08});
+  function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,230,118,${p.o})`;ctx.fill()});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,230,118,${.05*(1-d/110)})`;ctx.stroke()}}requestAnimationFrame(draw)}draw()
+}
+
+addEventListener('DOMContentLoaded',()=>{initBg();loadData()});
+</script>
+</body>
+</html>
