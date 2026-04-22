@@ -392,7 +392,7 @@ body {
     <div class="login-sub">เกษตรเพิ่มมูลค่าด้วยเทคโนโลยีและนวัตกรรม • จ.หนองบัวลำภู</div>
     <div class="field">
       <label>ชื่อผู้ใช้</label>
-      <input type="text" id="loginUser" placeholder="เช่น ARG001">
+      <input type="text" id="loginUser" placeholder="เช่น Admin">
     </div>
     <div class="field">
       <label>รหัสผ่าน</label>
@@ -529,11 +529,11 @@ let allData = {};
 // USERS
 // ============================================================
 let users = JSON.parse(localStorage.getItem('agri_users') || 'null') || [
-  { username: 'ARG001', password: '039001', role: 'admin', agency: 'ผู้ดูแลระบบ' },
-  { username: 'ARG002', password: '039002', role: 'user', agency: 'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู' },
-  { username: 'ARG003', password: '039003', role: 'user', agency: 'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู' },
-  { username: 'ARG004', password: '039004', role: 'user', agency: 'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู' },
-  { username: 'ARG005', password: '039005', role: 'user', agency: 'สำนักงานเกษตรจังหวัดหนองบัวลำภู' }
+  { username: 'Admin', password: '039909', role: 'admin', agency: 'ผู้ดูแลระบบ' },
+  { username: 'ARG001', password: '139002', role: 'user', agency: 'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู' },
+  { username: 'ARG002', password: '139303', role: 'user', agency: 'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู' },
+  { username: 'ARG003', password: '139404', role: 'user', agency: 'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู' },
+  { username: 'ARG004', password: '139505', role: 'user', agency: 'สำนักงานเกษตรจังหวัดหนองบัวลำภู' }
 ];
 
 function saveUsersLocal() { localStorage.setItem('agri_users', JSON.stringify(users)); }
