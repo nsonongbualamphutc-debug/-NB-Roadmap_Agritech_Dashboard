@@ -707,7 +707,6 @@ function loadData() {
 // ============================================================
 function saveToSheet() {
   collectFormData();
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxpvehuUZ8jZ_iyFaFT-CdXAI3FMeDR64Ilp09MQe50Kbm--pqQ1SryEXlz04qKRrwgYQ/exec') { toast('⚠️ กรุณาตั้งค่า APPS_SCRIPT_URL ก่อน', true); return; }
 
   const rows = [];
   STRATEGIES.forEach(s => {
