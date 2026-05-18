@@ -172,7 +172,7 @@ body.fullscreen .wrap{padding:10px}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
-const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbz5tT1SRhdcAEhYEllki8wHYfSKWN26KNIuA0gwiJozTkbC3-CZgCIEqgByi3PuL3jS/exec';
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxpvehuUZ8jZ_iyFaFT-CdXAI3FMeDR64Ilp09MQe50Kbm--pqQ1SryEXlz04qKRrwgYQ/exec';
 const REFRESH_SEC=30;
 const STRATEGIES=[
   {id:'S1',num:1,title:'ส่งเสริมและยกระดับการผลิตสู่มาตรฐานเกษตรมูลค่าสูง',agency:'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',color:'c1',kpis:[{id:'s1k1',name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s1k2',name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน',target:'เพิ่มขึ้น ≥5%/ปี',unit:'กลุ่ม'}]},
@@ -210,7 +210,39 @@ function refreshNow(){countdown=0;fetchFromSheet();countdown=REFRESH_SEC}
 
 // LOAD DATA
 function loadData(){const s=localStorage.getItem('agri_data');if(s)allData=JSON.parse(s);render();setTimeout(()=>document.getElementById('ldScreen').classList.add('done'),600);fetchFromSheet();startAutoRefresh()}
-function fetchFromSheet(){const cb='cb_'+Date.now();window[cb]=function(r){if(r.status==='ok'&&r.data&&r.data.length>0){r.data.forEach(row=>{const kid=findKpiId(row.kpiName);if(kid)allData[kid]={baseline:row.baseline||'',monthVal:row.monthVal||'',monthUnit:row.monthUnit||'',cumulVal:row.cumulVal||'',cumulUnit:row.cumulUnit||'',pctChange:row.pctChange||0,reportMonth:row.reportMonth||''}});localStorage.setItem('agri_data',JSON.stringify(allData));render();document.getElementById('dataNote').innerHTML='🔄 อัปเดตจาก Google Sheet เมื่อ <span>'+new Date().toLocaleTimeString('th-TH')+'</span> • รีเฟรชอัตโนมัติทุก '+REFRESH_SEC+' วินาที'}delete window[cb]};const sc=document.createElement('script');sc.src=APPS_SCRIPT_URL+'?action=getKPI&callback='+cb;sc.onerror=()=>{document.getElementById('dataNote').innerHTML='แสดงข้อมูลจาก Local Storage • <span>รอเชื่อมต่อ Google Sheet...</span>';delete window[cb]};document.body.appendChild(sc)}
+function fetchFromSheet(){
+  const cb='cb_'+Date.now();
+  let done=false;
+  window[cb]=function(r){
+    done=true;
+    if(r.status==='ok'&&r.data&&r.data.length>0){
+      r.data.forEach(row=>{const kid=findKpiId(row.kpiName);if(kid)allData[kid]={baseline:row.baseline||'',monthVal:row.monthVal||'',monthUnit:row.monthUnit||'',cumulVal:row.cumulVal||'',cumulUnit:row.cumulUnit||'',pctChange:row.pctChange||0,reportMonth:row.reportMonth||''}});
+      localStorage.setItem('agri_data',JSON.stringify(allData));render();
+      document.getElementById('dataNote').innerHTML='🔄 อัปเดตจาก Google Sheet เมื่อ <span>'+new Date().toLocaleTimeString('th-TH')+'</span> • รีเฟรชอัตโนมัติทุก '+REFRESH_SEC+' วินาที';
+    }else if(r.status==='ok'&&(!r.data||r.data.length===0)){
+      document.getElementById('dataNote').innerHTML='⚠️ <span>Google Sheet ยังไม่มีข้อมูล</span> — กรุณากรอกข้อมูลจากหน้ากรอกก่อน แล้วกดบันทึก';
+    }else{
+      document.getElementById('dataNote').innerHTML='❌ <span>ดึงข้อมูลไม่สำเร็จ</span> — ตรวจสอบ Apps Script';
+    }
+    delete window[cb];
+  };
+  const sc=document.createElement('script');
+  sc.src=APPS_SCRIPT_URL+'?action=getKPI&callback='+cb;
+  sc.onerror=()=>{
+    if(!done){
+      document.getElementById('dataNote').innerHTML='❌ <span>เชื่อมต่อ Google Sheet ไม่ได้</span> — ตรวจสอบว่า Deploy เป็น "Anyone" และ URL ถูกต้อง';
+      delete window[cb];
+    }
+  };
+  document.body.appendChild(sc);
+  // Timeout 10 วินาที
+  setTimeout(()=>{
+    if(!done&&window[cb]){
+      document.getElementById('dataNote').innerHTML='⏳ <span>รอนานเกินไป</span> — Google Sheet อาจโหลดช้า กำลังลองใหม่...';
+      delete window[cb];
+    }
+  },10000);
+}
 function findKpiId(name){for(const s of STRATEGIES)for(const k of s.kpis)if(k.name===name)return k.id;return null}
 function fmt(v){const n=parseFloat(v);if(isNaN(n))return'-';return n.toLocaleString('th-TH')}
 
