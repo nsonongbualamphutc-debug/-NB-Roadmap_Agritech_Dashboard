@@ -481,8 +481,8 @@ const STRATEGIES = [
     agency: 'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',
     period: '1 ต.ค. 2567 – 30 ก.ย. 2569',
     kpis: [
-      { id:'s1k1', name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'บาท' },
-      { id:'s1k2', name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'กลุ่ม' }
+      { id:'s1k1', name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'บาท', targetType:'growth', targetValue:5 },
+      { id:'s1k2', name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'กลุ่ม', targetType:'growth', targetValue:5 }
     ]
   },
   {
@@ -491,9 +491,9 @@ const STRATEGIES = [
     agency: 'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู',
     period: '1 ต.ค. 2567 – 30 ก.ย. 2569',
     kpis: [
-      { id:'s2k1', name:'มูลค่าผลิตภัณฑ์แปรรูป', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'บาท' },
-      { id:'s2k2', name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ราย' },
-      { id:'s2k3', name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ผลิตภัณฑ์' }
+      { id:'s2k1', name:'มูลค่าผลิตภัณฑ์แปรรูป', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'บาท', targetType:'growth', targetValue:5 },
+      { id:'s2k2', name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ราย', targetType:'growth', targetValue:5 },
+      { id:'s2k3', name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ผลิตภัณฑ์', targetType:'growth', targetValue:5 }
     ]
   },
   {
@@ -502,9 +502,9 @@ const STRATEGIES = [
     agency: 'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู',
     period: '1 ต.ค. 2567 – 30 ก.ย. 2568',
     kpis: [
-      { id:'s3k1', name:'มูลค่าการจำหน่าย', target:'เพิ่มขึ้น ≥10% ต่อปี', unit:'บาท' },
-      { id:'s3k2', name:'จำนวนผลิตภัณฑ์ที่ยื่นขอใช้ตรา Nong Bua Lamphu Brand', target:'≥15% ต่อปี', unit:'ผลิตภัณฑ์' },
-      { id:'s3k3', name:'ความพึงพอใจผู้บริโภคต่อ Nong Bua Lamphu Brand', target:'≥90%', unit:'%' }
+      { id:'s3k1', name:'มูลค่าการจำหน่าย', target:'เพิ่มขึ้น ≥10% ต่อปี', unit:'บาท', targetType:'growth', targetValue:10 },
+      { id:'s3k2', name:'จำนวนผลิตภัณฑ์ที่ยื่นขอใช้ตรา Nong Bua Lamphu Brand', target:'≥15% ต่อปี', unit:'ผลิตภัณฑ์', targetType:'growth', targetValue:15 },
+      { id:'s3k3', name:'ความพึงพอใจผู้บริโภคต่อ Nong Bua Lamphu Brand', target:'≥90%', unit:'%', targetType:'level', targetValue:90 }
     ]
   },
   {
@@ -513,14 +513,26 @@ const STRATEGIES = [
     agency: 'สำนักงานเกษตรจังหวัดหนองบัวลำภู',
     period: '1 ต.ค. 2567 – 30 ก.ย. 2568',
     kpis: [
-      { id:'s4k1', name:'จำนวนเกษตรกรต้นแบบ', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ราย' },
-      { id:'s4k2', name:'สัดส่วนวิสาหกิจชุมชนศักยภาพระดับดี', target:'≥35.6% ของฐานเดิม', unit:'%' },
-      { id:'s4k3', name:'สัดส่วนสหกรณ์เกษตรเข้มแข็งระดับ 1-2', target:'≥10%', unit:'%' }
+      { id:'s4k1', name:'จำนวนเกษตรกรต้นแบบ', target:'เพิ่มขึ้น ≥5% ต่อปี', unit:'ราย', targetType:'growth', targetValue:5 },
+      { id:'s4k2', name:'สัดส่วนวิสาหกิจชุมชนศักยภาพระดับดี', target:'≥35.6%', unit:'%', targetType:'level', targetValue:35.6 },
+      { id:'s4k3', name:'สัดส่วนสหกรณ์เกษตรเข้มแข็งระดับ 1-2', target:'≥10%', unit:'%', targetType:'level', targetValue:10 }
     ]
   }
 ];
 
 const MONTHS = ['ต.ค.67','พ.ย.67','ธ.ค.67','ม.ค.68','ก.พ.68','มี.ค.68','เม.ย.68','พ.ค.68','มิ.ย.68','ก.ค.68','ส.ค.68','ก.ย.68','ต.ค.68','พ.ย.68','ธ.ค.68','ม.ค.69','ก.พ.69','มี.ค.69','เม.ย.69','พ.ค.69','มิ.ย.69','ก.ค.69','ส.ค.69','ก.ย.69'];
+
+// หา KPI object จาก id
+function findKpi(id){for(const s of STRATEGIES)for(const k of s.kpis)if(k.id===id)return k;return null}
+// % บรรลุเป้า: growth = โตจริง/เป้าโต*100, level = สะสม/เป้า*100
+function kAch(k,d){
+  if(!k||!d)return null;
+  const base=parseFloat(d.baseline),cumul=parseFloat(d.cumulVal),tv=k.targetValue;
+  if(isNaN(cumul)||!tv)return null;
+  if(k.targetType==='level')return {pct:cumul/tv*100,type:'level'};
+  if(isNaN(base)||base===0)return null;
+  return {pct:((cumul-base)/base*100)/tv*100,type:'growth'};
+}
 
 let currentUser = null;
 let allData = {};
@@ -591,8 +603,14 @@ function buildForms() {
     const kpiHTML = s.kpis.map((k, i) => {
       const d = allData[k.id] || {};
       const pct = d.pctChange || 0;
+      const isLevel = k.targetType === 'level';
       const pctClass = pct < 0 ? 'computed negative' : 'computed';
-      const pctDisplay = d.baseline && d.cumulVal ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%' : '-';
+      const hasVals = d.baseline && d.cumulVal;
+      const pctLabel = isLevel ? 'เพิ่ม/ลด (จุด)' : '% เพิ่ม/ลด จากฐาน';
+      const pctDisplay = hasVals ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + (isLevel ? '' : '%') : '-';
+      const a = kAch(k, d);
+      const achClass = a && a.pct < 80 ? 'computed negative' : 'computed';
+      const achDisplay = a ? a.pct.toFixed(0) + '%' : '-';
       return `
       <div class="kpi-entry">
         <div class="kpi-entry-header">
@@ -618,8 +636,12 @@ function buildForms() {
             <input type="number" id="cval_${k.id}" value="${d.cumulVal||''}" placeholder="0" oninput="calc('${k.id}')">
           </div>
           <div class="kpi-field">
-            <label>% เพิ่ม/ลด จากฐาน</label>
+            <label>${pctLabel}</label>
             <input type="text" id="pct_${k.id}" class="${pctClass}" value="${pctDisplay}" readonly>
+          </div>
+          <div class="kpi-field">
+            <label>% บรรลุเป้า</label>
+            <input type="text" id="ach_${k.id}" class="${achClass}" value="${achDisplay}" readonly title="เป้า: ${k.target}">
           </div>
           <div class="kpi-field">
             <label>เดือนที่รายงาน</label>
@@ -651,6 +673,8 @@ function buildForms() {
 // CALC % CHANGE
 // ============================================================
 function calc(kpiId) {
+  const k = findKpi(kpiId);
+  const isLevel = k && k.targetType === 'level';
   const base = parseFloat(document.getElementById('base_' + kpiId)?.value) || 0;
   const cumul = parseFloat(document.getElementById('cval_' + kpiId)?.value) || 0;
   const pctEl = document.getElementById('pct_' + kpiId);
@@ -659,9 +683,17 @@ function calc(kpiId) {
   if (base > 0) pct = ((cumul - base) / base) * 100;
 
   if (pctEl) {
-    const display = base > 0 ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%' : '-';
+    const display = base > 0 ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + (isLevel ? '' : '%') : '-';
     pctEl.value = display;
     pctEl.className = 'kpi-field ' + (pct < 0 ? 'computed negative' : 'computed');
+  }
+
+  // Update achievement field
+  const achEl = document.getElementById('ach_' + kpiId);
+  if (achEl) {
+    const a = kAch(k, { baseline: base || '', cumulVal: cumul || '' });
+    achEl.value = a ? a.pct.toFixed(0) + '%' : '-';
+    achEl.className = 'kpi-field ' + (a && a.pct < 80 ? 'computed negative' : 'computed');
   }
 
   // Update in-memory
@@ -749,12 +781,14 @@ function saveToSheet() {
 function exportCSV() {
   collectFormData();
   let csv = '\uFEFF';
-  csv += 'ยุทธศาสตร์,ชื่อยุทธศาสตร์,หน่วยงาน,ตัวชี้วัด,เป้าหมาย,ฐานเดิม,ผลงานรอบเดือน,หน่วย,ผลงานสะสม,%เปลี่ยนแปลง,เดือนรายงาน\n';
+  csv += 'ยุทธศาสตร์,ชื่อยุทธศาสตร์,หน่วยงาน,ตัวชี้วัด,เป้าหมาย,ฐานเดิม,ผลงานรอบเดือน,หน่วย,ผลงานสะสม,%เปลี่ยนแปลง,%บรรลุเป้า,เดือนรายงาน\n';
   const visible = getVisibleStrategies();
   visible.forEach(s => {
     s.kpis.forEach(k => {
       const d = allData[k.id] || {};
-      csv += `"ยุทธศาสตร์ที่ ${s.num}","${s.title}","${s.agency}","${k.name}","${k.target}","${d.baseline||''}","${d.monthVal||''}","${d.monthUnit||''}","${d.cumulVal||''}","${d.pctChange||0}","${d.reportMonth||''}"\n`;
+      const a = kAch(k, d);
+      const achTxt = a ? a.pct.toFixed(0) : '';
+      csv += `"ยุทธศาสตร์ที่ ${s.num}","${s.title}","${s.agency}","${k.name}","${k.target}","${d.baseline||''}","${d.monthVal||''}","${d.monthUnit||''}","${d.cumulVal||''}","${d.pctChange||0}","${achTxt}","${d.reportMonth||''}"\n`;
     });
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

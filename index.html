@@ -110,6 +110,15 @@ canvas#bgC{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-
 .pct-text{font-family:'Kanit';font-size:15px;font-weight:700}
 .pct-text.pos{color:var(--green)}.pct-text.neg{color:#e53935}
 .pct-sub{font-size:10px;color:var(--txt3)}
+.kpi-ach{text-align:center;margin-top:10px}
+.ach-bar{height:6px;background:rgba(var(--pc),0.06);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.ach-fill{height:100%;border-radius:3px;width:0;transition:width 1.8s cubic-bezier(.4,0,.2,1)}
+.ach-fill.done{background:var(--grad-g)}.ach-fill.near{background:linear-gradient(135deg,#ff8f00,#ffd740)}.ach-fill.low{background:linear-gradient(135deg,#c62828,#e53935)}
+.ach-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:3px}
+.ach-pct{font-family:'Kanit';font-size:16px;font-weight:800}
+.ach-pct.done{color:var(--green)}.ach-pct.near{color:var(--gold)}.ach-pct.low{color:#e53935}
+.ach-chip{padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.ach-chip.done{background:rgba(var(--pc),0.12);color:var(--green)}.ach-chip.near{background:rgba(255,215,64,0.14);color:var(--gold)}.ach-chip.low{background:rgba(229,57,53,0.12);color:#e53935}.ach-chip.none{background:rgba(150,150,150,0.12);color:var(--txt3)}
 
 .charts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:14px;margin:20px 0}
 .chart-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:all .4s}
@@ -144,7 +153,7 @@ body.fullscreen .wrap{padding:10px}
 <div class="wrap">
   <div class="toolbar">
     <div class="live-clock"><div class="live-dot"></div><span id="clock"></span></div>
-    <div class="refresh-ind" id="refreshNote">Auto-refresh: 30s</div>
+    <div class="refresh-ind" id="refreshNote">Auto-refresh: 5 นาที</div>
     <button class="tool-btn" onclick="toggleTheme()" id="themeBtn">🌙 มืด</button>
     <button class="tool-btn" onclick="toggleFullscreen()">🖥️ เต็มจอ</button>
     <button class="tool-btn" onclick="refreshNow()">🔄 รีเฟรช</button>
@@ -161,24 +170,25 @@ body.fullscreen .wrap{padding:10px}
   <div class="agency-sec"><div class="agency-title">🏛️ หน่วยงานรับผิดชอบรายยุทธศาสตร์</div><div class="agency-grid" id="agencyGrid"></div></div>
   <div id="stratSections"></div>
   <div class="charts-row">
-    <div class="chart-box"><div class="chart-label"><div class="dot"></div> ผลงานสะสมรวมรายยุทธศาสตร์</div><canvas id="cBar" height="260"></canvas></div>
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> % บรรลุเป้าเฉลี่ยรายยุทธศาสตร์</div><canvas id="cBar" height="260"></canvas></div>
     <div class="chart-box"><div class="chart-label"><div class="dot"></div> สัดส่วนความครบถ้วนข้อมูล</div><canvas id="cRadar" height="260"></canvas></div>
   </div>
   <div class="charts-row">
-    <div class="chart-box"><div class="chart-label"><div class="dot"></div> % การเปลี่ยนแปลงรายตัวชี้วัด</div><canvas id="cPct" height="260"></canvas></div>
-    <div class="chart-box"><div class="chart-label"><div class="dot"></div> เปรียบเทียบฐานเดิม vs ผลงานสะสม</div><canvas id="cCompare" height="260"></canvas></div>
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> % บรรลุเป้ารายตัวชี้วัด</div><canvas id="cPct" height="260"></canvas></div>
+    <div class="chart-box"><div class="chart-label"><div class="dot"></div> ดัชนีผลงานเทียบฐาน (ฐาน = 100)</div><canvas id="cCompare" height="260"></canvas></div>
   </div>
   <div class="footer"><p>ผู้จัดทำและดูแลระบบ: <span>สำนักงานสถิติจังหวัดหนองบัวลำภู</span><br>สำนักงานสถิติแห่งชาติ กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม</p></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
 const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxpvehuUZ8jZ_iyFaFT-CdXAI3FMeDR64Ilp09MQe50Kbm--pqQ1SryEXlz04qKRrwgYQ/exec';
-const REFRESH_SEC=30;
+const REFRESH_SEC=300;
+// targetType: 'growth' = เป้าอัตราเติบโต (%บรรลุ = โตจริง/เป้าโต*100) | 'level' = เป้าระดับสัมบูรณ์ (%บรรลุ = สะสม/เป้า*100)
 const STRATEGIES=[
-  {id:'S1',num:1,title:'ส่งเสริมและยกระดับการผลิตสู่มาตรฐานเกษตรมูลค่าสูง',agency:'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',color:'c1',kpis:[{id:'s1k1',name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s1k2',name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน',target:'เพิ่มขึ้น ≥5%/ปี',unit:'กลุ่ม'}]},
-  {id:'S2',num:2,title:'การแปรรูปและสร้างมูลค่าเพิ่ม',agency:'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',color:'c2',kpis:[{id:'s2k1',name:'มูลค่าผลิตภัณฑ์แปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท'},{id:'s2k2',name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย'},{id:'s2k3',name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ผลิตภัณฑ์'}]},
-  {id:'S3',num:3,title:'การพัฒนาการตลาดและสร้างแบรนด์',agency:'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',color:'c3',kpis:[{id:'s3k1',name:'มูลค่าการจำหน่าย',target:'เพิ่มขึ้น ≥10%/ปี',unit:'บาท'},{id:'s3k2',name:'จำนวนผลิตภัณฑ์ที่ยื่นขอใช้ตรา Nong Bua Lamphu Brand',target:'≥15%/ปี',unit:'ผลิตภัณฑ์'},{id:'s3k3',name:'ความพึงพอใจผู้บริโภคต่อ Nong Bua Lamphu Brand',target:'≥90%',unit:'%'}]},
-  {id:'S4',num:4,title:'การสร้างความเข้มแข็งให้เกษตรกรและสถาบันเกษตร',agency:'สำนักงานเกษตรจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',color:'c4',kpis:[{id:'s4k1',name:'จำนวนเกษตรกรต้นแบบ',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย'},{id:'s4k2',name:'สัดส่วนวิสาหกิจชุมชนศักยภาพระดับดี',target:'≥35.6% ของฐานเดิม',unit:'%'},{id:'s4k3',name:'สัดส่วนสหกรณ์เกษตรเข้มแข็งระดับ 1-2',target:'≥10%',unit:'%'}]}
+  {id:'S1',num:1,title:'ส่งเสริมและยกระดับการผลิตสู่มาตรฐานเกษตรมูลค่าสูง',agency:'สำนักงานเกษตรและสหกรณ์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',color:'c1',kpis:[{id:'s1k1',name:'มูลค่าสินค้าเกษตรที่ได้รับมาตรฐาน (PGS, GAP, Organic, GI)',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท',targetType:'growth',targetValue:5},{id:'s1k2',name:'จำนวนกลุ่มเกษตรกรที่ได้รับการรับรองมาตรฐาน',target:'เพิ่มขึ้น ≥5%/ปี',unit:'กลุ่ม',targetType:'growth',targetValue:5}]},
+  {id:'S2',num:2,title:'การแปรรูปและสร้างมูลค่าเพิ่ม',agency:'สำนักงานพัฒนาชุมชนจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2569',color:'c2',kpis:[{id:'s2k1',name:'มูลค่าผลิตภัณฑ์แปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'บาท',targetType:'growth',targetValue:5},{id:'s2k2',name:'จำนวนผู้ประกอบการที่ได้รับการถ่ายทอดเทคโนโลยีแปรรูป',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย',targetType:'growth',targetValue:5},{id:'s2k3',name:'จำนวนผลิตภัณฑ์แปรรูปที่ได้รับมาตรฐานออกสู่ตลาด',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ผลิตภัณฑ์',targetType:'growth',targetValue:5}]},
+  {id:'S3',num:3,title:'การพัฒนาการตลาดและสร้างแบรนด์',agency:'สำนักงานพาณิชย์จังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',color:'c3',kpis:[{id:'s3k1',name:'มูลค่าการจำหน่าย',target:'เพิ่มขึ้น ≥10%/ปี',unit:'บาท',targetType:'growth',targetValue:10},{id:'s3k2',name:'จำนวนผลิตภัณฑ์ที่ยื่นขอใช้ตรา Nong Bua Lamphu Brand',target:'≥15%/ปี',unit:'ผลิตภัณฑ์',targetType:'growth',targetValue:15},{id:'s3k3',name:'ความพึงพอใจผู้บริโภคต่อ Nong Bua Lamphu Brand',target:'≥90%',unit:'%',targetType:'level',targetValue:90}]},
+  {id:'S4',num:4,title:'การสร้างความเข้มแข็งให้เกษตรกรและสถาบันเกษตร',agency:'สำนักงานเกษตรจังหวัดหนองบัวลำภู',period:'1 ต.ค. 2567 – 30 ก.ย. 2568',color:'c4',kpis:[{id:'s4k1',name:'จำนวนเกษตรกรต้นแบบ',target:'เพิ่มขึ้น ≥5%/ปี',unit:'ราย',targetType:'growth',targetValue:5},{id:'s4k2',name:'สัดส่วนวิสาหกิจชุมชนศักยภาพระดับดี',target:'≥35.6%',unit:'%',targetType:'level',targetValue:35.6},{id:'s4k3',name:'สัดส่วนสหกรณ์เกษตรเข้มแข็งระดับ 1-2',target:'≥10%',unit:'%',targetType:'level',targetValue:10}]}
 ];
 let allData={},refreshTimer,countdown=REFRESH_SEC;
 
@@ -205,7 +215,7 @@ function toggleFullscreen(){if(!document.fullscreenElement){document.documentEle
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)document.body.classList.remove('fullscreen')});
 
 // AUTO-REFRESH
-function startAutoRefresh(){countdown=REFRESH_SEC;clearInterval(refreshTimer);refreshTimer=setInterval(()=>{countdown--;document.getElementById('refreshNote').textContent='Auto-refresh: '+countdown+'s';if(countdown<=0){countdown=REFRESH_SEC;fetchFromSheet()}},1000)}
+function startAutoRefresh(){countdown=REFRESH_SEC;clearInterval(refreshTimer);refreshTimer=setInterval(()=>{countdown--;const m=Math.floor(countdown/60),sec=countdown%60;document.getElementById('refreshNote').textContent='รีเฟรชใน '+(m>0?m+':'+String(sec).padStart(2,'0'):sec+'s');if(countdown<=0){countdown=REFRESH_SEC;fetchFromSheet()}},1000)}
 function refreshNow(){countdown=0;fetchFromSheet();countdown=REFRESH_SEC}
 
 // LOAD DATA
@@ -218,7 +228,7 @@ function fetchFromSheet(){
     if(r.status==='ok'&&r.data&&r.data.length>0){
       r.data.forEach(row=>{const kid=findKpiId(row.kpiName);if(kid)allData[kid]={baseline:row.baseline||'',monthVal:row.monthVal||'',monthUnit:row.monthUnit||'',cumulVal:row.cumulVal||'',cumulUnit:row.cumulUnit||'',pctChange:row.pctChange||0,reportMonth:row.reportMonth||''}});
       localStorage.setItem('agri_data',JSON.stringify(allData));render();
-      document.getElementById('dataNote').innerHTML='🔄 อัปเดตจาก Google Sheet เมื่อ <span>'+new Date().toLocaleTimeString('th-TH')+'</span> • รีเฟรชอัตโนมัติทุก '+REFRESH_SEC+' วินาที';
+      document.getElementById('dataNote').innerHTML='🔄 อัปเดตจาก Google Sheet เมื่อ <span>'+new Date().toLocaleTimeString('th-TH')+'</span> • รีเฟรชอัตโนมัติทุก '+(REFRESH_SEC/60)+' นาที';
     }else if(r.status==='ok'&&(!r.data||r.data.length===0)){
       document.getElementById('dataNote').innerHTML='⚠️ <span>Google Sheet ยังไม่มีข้อมูล</span> — กรุณากรอกข้อมูลจากหน้ากรอกก่อน แล้วกดบันทึก';
     }else{
@@ -246,6 +256,23 @@ function fetchFromSheet(){
 function findKpiId(name){for(const s of STRATEGIES)for(const k of s.kpis)if(k.name===name)return k.id;return null}
 function fmt(v){const n=parseFloat(v);if(isNaN(n))return'-';return n.toLocaleString('th-TH')}
 
+// ===== ACHIEVEMENT: ตัววัดกลางที่เทียบได้ทุกหน่วย =====
+// คืน null = ยังคำนวณไม่ได้ (ไม่มีข้อมูล/ไม่มีฐาน)
+function kAch(k,d){
+  if(!d)return null;
+  const base=parseFloat(d.baseline),cumul=parseFloat(d.cumulVal),tv=k.targetValue;
+  if(isNaN(cumul)||!tv)return null;
+  if(k.targetType==='level'){
+    const pts=isNaN(base)?null:cumul-base;
+    return {pct:cumul/tv*100,type:'level',current:cumul,growthPts:pts};
+  }
+  if(isNaN(base)||base===0)return null;
+  const g=(cumul-base)/base*100;
+  return {pct:g/tv*100,type:'growth',growth:g};
+}
+function achSt(p){return p>=100?'done':p>=80?'near':'low'}
+function achLb(s){return s==='done'?'บรรลุเป้า':s==='near'?'ใกล้บรรลุ':'ต่ำกว่าเป้า'}
+
 function render(){renderTop();renderAgency();renderStrat();renderCharts();setTimeout(animateAll,100);setTimeout(animateBars,200);setTimeout(autoFitValues,150)}
 
 // Auto-fit: ย่อ font ลงถ้าตัวเลขยาวเกินช่องของมัน
@@ -260,16 +287,20 @@ function autoFitValues(){
   });
 }
 
-function renderTop(){const total=STRATEGIES.reduce((a,s)=>a+s.kpis.length,0);let filled=0,sumP=0,cntP=0;STRATEGIES.forEach(s=>s.kpis.forEach(k=>{const d=allData[k.id];if(d&&d.cumulVal)filled++;if(d&&d.pctChange){sumP+=d.pctChange;cntP++}}));const avg=cntP>0?sumP/cntP:0,pctD=total>0?filled/total*100:0;
+function renderTop(){const total=STRATEGIES.reduce((a,s)=>a+s.kpis.length,0);let filled=0,achieved=0,withAch=0;STRATEGIES.forEach(s=>s.kpis.forEach(k=>{const d=allData[k.id];if(d&&d.cumulVal)filled++;const a=kAch(k,d);if(a){withAch++;if(a.pct>=100)achieved++}}));const pctD=total>0?filled/total*100:0,pctA=withAch>0?achieved/withAch*100:0;
 document.getElementById('topStats').innerHTML=`
 <div class="top-card"><div class="tc-icon i1">📊</div><div class="tc-val" style="color:var(--green)" data-count="${STRATEGIES.length}">${STRATEGIES.length}</div><div class="tc-label">ยุทธศาสตร์</div><div class="tc-bar"><div class="tc-bar-fill" data-width="100"></div></div></div>
 <div class="top-card"><div class="tc-icon i2">🎯</div><div class="tc-val" style="color:var(--gold)" data-count="${total}">${total}</div><div class="tc-label">ตัวชี้วัด (KPI)</div><div class="tc-bar"><div class="tc-bar-fill" data-width="100"></div></div></div>
 <div class="top-card"><div class="tc-icon i3">✅</div><div class="tc-val" style="color:var(--lime)" data-count="${filled}">${filled}</div><div class="tc-label">KPI ที่มีข้อมูลแล้ว</div><div class="tc-badge ${pctD>=50?'up':'down'}">${pctD.toFixed(0)}%</div><div class="tc-bar"><div class="tc-bar-fill" data-width="${pctD}"></div></div></div>
-<div class="top-card"><div class="tc-icon i4">📈</div><div class="tc-val" style="color:${avg>=0?'var(--green)':'#e53935'}">${avg>=0?'+':''}${avg.toFixed(1)}%</div><div class="tc-label">ค่าเฉลี่ย % เปลี่ยนแปลง</div><div class="tc-badge ${avg>=0?'up':'down'}">${avg>=0?'↑ เพิ่มขึ้น':'↓ ลดลง'}</div><div class="tc-bar"><div class="tc-bar-fill" data-width="${Math.min(Math.abs(avg),100)}"></div></div></div>`}
+<div class="top-card"><div class="tc-icon i4">🏆</div><div class="tc-val" style="color:${pctA>=50?'var(--green)':'var(--gold)'}" data-count="${achieved}">${achieved}</div><div class="tc-label">KPI บรรลุเป้า${withAch>0?' (จาก '+withAch+' ตัวที่คำนวณได้)':''}</div><div class="tc-badge ${pctA>=50?'up':'down'}">${withAch>0?pctA.toFixed(0)+'%':'—'}</div><div class="tc-bar"><div class="tc-bar-fill" data-width="${pctA}"></div></div></div>`}
 
 function renderAgency(){document.getElementById('agencyGrid').innerHTML=STRATEGIES.map(s=>{const f=s.kpis.filter(k=>allData[k.id]?.cumulVal).length;return `<div class="agency-chip"><div class="agency-dot ${s.color}"></div><div><div class="a-name">${s.agency}</div><div class="a-strat">ยุทธศาสตร์ที่ ${s.num} • ${f}/${s.kpis.length} KPI</div></div><div class="a-kpi-count" data-count="${f}">${f}</div></div>`}).join('')}
 
-function renderStrat(){document.getElementById('stratSections').innerHTML=STRATEGIES.map(s=>{const kc=s.kpis.map((k,i)=>{const d=allData[k.id]||{},pct=d.pctChange||0,pa=Math.min(Math.abs(pct),100),ip=pct>=0,hd=d.baseline||d.cumulVal;return `<div class="kpi-card"><div class="kpi-top"><span class="kpi-badge">KPI ${i+1}</span><span class="kpi-name">${k.name}</span><span class="kpi-target">${k.target}</span></div><div class="kpi-metrics"><div class="kpi-metric"><div class="m-val gold" data-count="${parseFloat(d.baseline)||0}">${fmt(d.baseline)}</div><div class="m-label">ฐานเดิม</div></div><div class="kpi-metric"><div class="m-val" data-count="${parseFloat(d.monthVal)||0}">${fmt(d.monthVal)}</div><div class="m-label">รอบเดือน${d.reportMonth?' ('+d.reportMonth+')':''}</div></div><div class="kpi-metric"><div class="m-val" data-count="${parseFloat(d.cumulVal)||0}">${fmt(d.cumulVal)}</div><div class="m-label">สะสม (${d.monthUnit||k.unit})</div></div></div><div class="kpi-pct"><div class="pct-bar"><div class="pct-fill ${ip?'pos':'neg'}" data-width="${hd?pa:0}"></div></div><span class="pct-text ${ip?'pos':'neg'}">${hd?(ip?'+':'')+pct.toFixed(1)+'%':'ยังไม่มีข้อมูล'}</span><div class="pct-sub">เปลี่ยนแปลงจากฐานเดิม</div></div></div>`}).join('');return `<div class="strat" data-color="${s.color}"><div class="strat-head"><div class="strat-num">${s.num}</div><div><div class="strat-title">${s.title}</div><div class="strat-period">📅 ${s.period}</div></div><div class="strat-agency">${s.agency}</div></div><div class="kpi-grid">${kc}</div></div>`}).join('')}
+function renderStrat(){document.getElementById('stratSections').innerHTML=STRATEGIES.map(s=>{const kc=s.kpis.map((k,i)=>{const d=allData[k.id]||{},a=kAch(k,d);let achBlock;
+if(a){const st=achSt(a.pct),w=Math.min(a.pct,100);let sub;if(a.type==='growth'){sub=`เติบโต ${a.growth>=0?'+':''}${a.growth.toFixed(1)}% • เป้า ≥${k.targetValue}%`}else{sub=`ปัจจุบัน ${fmt(a.current)}%${a.growthPts!=null?' ('+(a.growthPts>=0?'+':'')+a.growthPts.toFixed(1)+' จุดจากฐาน)':''} • เป้า ≥${k.targetValue}%`}
+achBlock=`<div class="kpi-ach"><div class="ach-bar"><div class="ach-fill ${st}" data-width="${w}"></div></div><div class="ach-row"><span class="ach-pct ${st}">${a.pct.toFixed(0)}%</span><span class="ach-chip ${st}">${achLb(st)}</span></div><div class="pct-sub">${sub}</div></div>`}
+else{achBlock=`<div class="kpi-ach"><div class="ach-bar"><div class="ach-fill" style="width:0"></div></div><div class="ach-row"><span class="ach-pct" style="color:var(--txt3)">—</span><span class="ach-chip none">ยังไม่มีข้อมูล</span></div><div class="pct-sub">% บรรลุเป้าหมาย</div></div>`}
+return `<div class="kpi-card"><div class="kpi-top"><span class="kpi-badge">KPI ${i+1}</span><span class="kpi-name">${k.name}</span><span class="kpi-target">${k.target}</span></div><div class="kpi-metrics"><div class="kpi-metric"><div class="m-val gold" data-count="${parseFloat(d.baseline)||0}">${fmt(d.baseline)}</div><div class="m-label">ฐานเดิม</div></div><div class="kpi-metric"><div class="m-val" data-count="${parseFloat(d.monthVal)||0}">${fmt(d.monthVal)}</div><div class="m-label">รอบเดือน${d.reportMonth?' ('+d.reportMonth+')':''}</div></div><div class="kpi-metric"><div class="m-val" data-count="${parseFloat(d.cumulVal)||0}">${fmt(d.cumulVal)}</div><div class="m-label">สะสม (${d.monthUnit||k.unit})</div></div></div>${achBlock}</div>`}).join('');return `<div class="strat" data-color="${s.color}"><div class="strat-head"><div class="strat-num">${s.num}</div><div><div class="strat-title">${s.title}</div><div class="strat-period">📅 ${s.period}</div></div><div class="strat-agency">${s.agency}</div></div><div class="kpi-grid">${kc}</div></div>`}).join('')}
 
 // CHARTS
 let charts={};function dC(id){if(charts[id]){charts[id].destroy();delete charts[id]}}
@@ -278,11 +309,19 @@ function cO(){const s=getComputedStyle(document.documentElement);return{responsi
 
 function renderCharts(){
   const cs=getComputedStyle(document.documentElement),tck=cs.getPropertyValue('--chart-tick').trim(),grd=cs.getPropertyValue('--chart-grid').trim(),lgd=cs.getPropertyValue('--chart-legend').trim(),gc=cs.getPropertyValue('--green').trim();
-  dC('cBar');charts.cBar=new Chart(document.getElementById('cBar'),{type:'bar',data:{labels:STRATEGIES.map(s=>'ยุทธ์ '+s.num),datasets:[{label:'ผลงานสะสมรวม',data:STRATEGIES.map(s=>s.kpis.reduce((a,k)=>a+(parseFloat(allData[k.id]?.cumulVal)||0),0)),backgroundColor:clr,borderColor:bdr,borderWidth:2,borderRadius:8}]},options:cO()});
+  const ak=STRATEGIES.flatMap(s=>s.kpis);
+  // 1) % บรรลุเป้าเฉลี่ยรายยุทธศาสตร์ (เทียบได้ทุกหน่วย)
+  const stratAch=STRATEGIES.map(s=>{let sum=0,n=0;s.kpis.forEach(k=>{const a=kAch(k,allData[k.id]);if(a){sum+=Math.min(a.pct,150);n++}});return n?+(sum/n).toFixed(1):0});
+  dC('cBar');charts.cBar=new Chart(document.getElementById('cBar'),{type:'bar',data:{labels:STRATEGIES.map(s=>'ยุทธ์ '+s.num),datasets:[{label:'% บรรลุเป้าเฉลี่ย',data:stratAch,backgroundColor:clr,borderColor:bdr,borderWidth:2,borderRadius:8}]},options:{...cO(),scales:{x:{ticks:{color:tck,font:{family:'Kanit',size:11}},grid:{color:grd}},y:{ticks:{color:tck,font:{family:'Kanit',size:11},callback:v=>v+'%'},grid:{color:grd},beginAtZero:true,suggestedMax:120}}}});
+  // 2) สัดส่วนความครบถ้วนข้อมูล (radar) — คงเดิม
   dC('cRadar');charts.cRadar=new Chart(document.getElementById('cRadar'),{type:'radar',data:{labels:STRATEGIES.map(s=>'ยุทธ์ '+s.num),datasets:[{label:'% ครบถ้วน',data:STRATEGIES.map(s=>{const t=s.kpis.length,f=s.kpis.filter(k=>allData[k.id]?.cumulVal).length;return t>0?f/t*100:0}),backgroundColor:gc+'1a',borderColor:gc,borderWidth:2,pointBackgroundColor:gc}]},options:{...cO(),scales:{r:{beginAtZero:true,max:100,ticks:{color:tck,backdropColor:'transparent',stepSize:25},grid:{color:grd},pointLabels:{color:lgd,font:{family:'Kanit',size:12}},angleLines:{color:grd}}}}});
-  const ak=STRATEGIES.flatMap(s=>s.kpis),pd=ak.map(k=>allData[k.id]?.pctChange||0);
-  dC('cPct');charts.cPct=new Chart(document.getElementById('cPct'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'% เปลี่ยนแปลง',data:pd,backgroundColor:pd.map(v=>v>=0?'rgba(0,230,118,0.6)':'rgba(229,57,53,0.6)'),borderColor:pd.map(v=>v>=0?'#00e676':'#e53935'),borderWidth:1,borderRadius:6}]},options:cO()});
-  dC('cCompare');charts.cCompare=new Chart(document.getElementById('cCompare'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'ฐานเดิม',data:ak.map(k=>parseFloat(allData[k.id]?.baseline)||0),backgroundColor:'rgba(255,215,64,0.4)',borderColor:'#ffd740',borderWidth:1,borderRadius:6},{label:'ผลงานสะสม',data:ak.map(k=>parseFloat(allData[k.id]?.cumulVal)||0),backgroundColor:'rgba(0,230,118,0.5)',borderColor:'#00e676',borderWidth:1,borderRadius:6}]},options:cO()});
+  // 3) % บรรลุเป้ารายตัวชี้วัด — สีตามสถานะ (เทา = ยังไม่มีข้อมูล)
+  const achRaw=ak.map(k=>kAch(k,allData[k.id]));
+  dC('cPct');charts.cPct=new Chart(document.getElementById('cPct'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'% บรรลุเป้า',data:achRaw.map(a=>a?+Math.min(a.pct,200).toFixed(1):0),backgroundColor:achRaw.map(a=>!a?'rgba(150,150,150,0.3)':a.pct>=100?'rgba(0,230,118,0.6)':a.pct>=80?'rgba(255,215,64,0.6)':'rgba(229,57,53,0.6)'),borderColor:achRaw.map(a=>!a?'rgba(150,150,150,0.5)':a.pct>=100?'#00e676':a.pct>=80?'#ffd740':'#e53935'),borderWidth:1,borderRadius:6}]},options:{...cO(),scales:{x:{ticks:{color:tck,font:{family:'Kanit',size:11}},grid:{color:grd}},y:{ticks:{color:tck,font:{family:'Kanit',size:11},callback:v=>v+'%'},grid:{color:grd},beginAtZero:true,suggestedMax:120}}}});
+  // 4) ดัชนีผลงานเทียบฐาน (ฐาน=100) — normalize ให้ทุกหน่วยอยู่บนแกนเดียวกันได้
+  const idx=ak.map(k=>{const d=allData[k.id]||{},b=parseFloat(d.baseline),c=parseFloat(d.cumulVal);return(!isNaN(b)&&b>0&&!isNaN(c))?+(c/b*100).toFixed(1):null});
+  const baseLine=ak.map(k=>{const b=parseFloat((allData[k.id]||{}).baseline);return(!isNaN(b)&&b>0)?100:null});
+  dC('cCompare');charts.cCompare=new Chart(document.getElementById('cCompare'),{type:'bar',data:{labels:ak.map((_,i)=>'KPI '+(i+1)),datasets:[{label:'ฐานเดิม (=100)',data:baseLine,backgroundColor:'rgba(255,215,64,0.4)',borderColor:'#ffd740',borderWidth:1,borderRadius:6},{label:'ผลงานสะสม (ดัชนี)',data:idx,backgroundColor:'rgba(0,230,118,0.5)',borderColor:'#00e676',borderWidth:1,borderRadius:6}]},options:{...cO(),scales:{x:{ticks:{color:tck,font:{family:'Kanit',size:11}},grid:{color:grd}},y:{ticks:{color:tck,font:{family:'Kanit',size:11}},grid:{color:grd},beginAtZero:true}}}});
 }
 
 // PARTICLES
